@@ -1,17 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    
     <div class="container">
         <div class="row">
-            {% for offreEmploi in listeOffresEmploi %}
-                <div>
-                    {{offreEmploi.intitule}}
-                </div>
-                {% endfor%}
-            
-        </div>
-        
-        
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Intitule</th>
+                        <th>Description</th>
+                        <th>Modifier</th>
+                    </tr>
+                </thead>
+                <tbody>         
+                    {% for offreEmploi in listeOffresEmploi %}
+                        <tr>
+                            <td>{{offreEmploi.id}}</td>
+                            <td>{{offreEmploi.intitule}}</td>
+                            <td>{{offreEmploi.descriptif}}</td>
+                            <td><button type = "button" class = "btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                        </tr>
+                    {% endfor%}
+                </tbody>
+        </div>  
     </div>
-    
- {% endblock%}
+
+{% endblock%}
