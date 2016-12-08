@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for offreEmploi in listeOffresEmploi %}
+                <div>
+                    {{offreEmploi.intitule}}
+                </div>
+                {% endfor%}
+            
+        </div>
+        
+        
+    </div>
+    
+ {% endblock%}
