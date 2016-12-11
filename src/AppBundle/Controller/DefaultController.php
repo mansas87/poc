@@ -43,18 +43,17 @@ class DefaultController extends Controller
     public function visualiserOffre(Request $request){
         
         if($request->isXMLHttpRequest()){
-            $idOffre = $request->get("idOffre");
-            $repository = $this->getDoctrine()->getRepository('AppBundle:OffreEmploi');
-            $offreRecherchee = $repository->find(intval($idOffre));
-            $logger = $this->get("logger");
-            $logger->error("idOffre "+$idOffre);
-            $logger->error("Offre "+$offreRecherchee->getIntitule());
-            return new JsonResponse(json_encode(array('data'=> $offreRecherchee)));
+            
+          $idOffre = $request->get("idOffre");
+          $repository = $this->getDoctrine()->getRepository('AppBundle:OffreEmploi');
+          $offreRecherchee = $repository->find(intval($idOffre));
+          
+          $content = $this->render('default/visualisation-offre-emploi.html.twig',array('offreRecherchee'=>$offreRecherchee))->getContent();
+          return new JsonResponse(json_encode(array('data'=> $content)));
             
         }
         return new Response("Requête incorrecte.",400);
         
-    }
-    
+    }    
     
 }

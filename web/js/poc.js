@@ -1,11 +1,11 @@
-
   function visualiserOffre(idOffre) {
-        
         $.ajax({
             url: "visualiser-offre",
             method: "get",
             data:{idOffre:idOffre}
-        }).done(function () {
-//         $('#myModal').modal('show');
+        }).done(function (response) {
+            template = JSON.parse(response).data;
+            $('.modal-body').html(template);
+         $('#myModal').modal('show');
         });
     }
