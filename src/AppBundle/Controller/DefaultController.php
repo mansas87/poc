@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Entity\OffreEmploi;
 
@@ -22,16 +24,36 @@ class DefaultController extends Controller
         ));
     }
     /**
-     * @Route("/liste-offres", name="homepage")
+     * @Route("/liste-offres")
      */
     public function listerLesOffresDEmploi(){
+        $logger = $this->get("logger");
         $repository = $this->getDoctrine()->getRepository('AppBundle:OffreEmploi');
         $listeOffresEmploi = $repository->findAll();
         if(is_null($listeOffresEmploi)){
-            throw $this->createNotFoundException('Il n\'existe pas encore d\'offre publiée.');
+            $logger->info("Il n'y a pas d'offre publiée.");
         }
         
         return $this->render('default/liste-offres-emploi.html.twig',array('listeOffresEmploi'=>$listeOffresEmploi));
+    }
+    
+    /**
+     * @Route("/visualiser-offre")
+     */
+    public function visualiserOffre(Request $request){
+        
+        if($request->isXMLHttpRequest()){
+            $idOffre = $request->get("idOffre");
+            $repository = $this->getDoctrine()->getRepository('AppBundle:OffreEmploi');
+            $offreRecherchee = $repository->find(intval($idOffre));
+            $logger = $this->get("logger");
+            $logger->error("idOffre "+$idOffre);
+            $logger->error("Offre "+$offreRecherchee->getIntitule());
+            return new JsonResponse(json_encode(array('data'=> $offreRecherchee)));
+            
+        }
+        return new Response("Requête incorrecte.",400);
+        
     }
     
     
