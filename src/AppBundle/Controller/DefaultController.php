@@ -9,22 +9,32 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Entity\OffreEmploi;
-
+use AppBundle\Form\OffreEmploiType;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/ajouter-offre", name="ajout_offre")
      */
-    public function indexAction(Request $request)
-    {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ));
+    public function ajouterOffreAction(Request $request) {
+        $offreEmploi = new OffreEmploi();
+
+        $form = $this->get('form.factory')->create(new OffreEmploiType(), $offreEmploi);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($offreEmploi);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('liste-offre',  array()));
+        }
+
+        return $this->render('default/ajouter-offre.html.twig', array('form' => $form->createView()));
     }
     /**
-     * @Route("/liste-offres")
+     * @Route("/liste-offres", name="liste-offre")
      */
     public function listerLesOffresDEmploi(){
         $logger = $this->get("logger");
